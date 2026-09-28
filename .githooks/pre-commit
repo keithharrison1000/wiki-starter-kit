@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# wiki-lint pre-commit hook: blocks a commit if any vault living in this
+# repo has broken links or raw/-source integrity issues (a raw file
+# changed/missing since ingest, or one nothing cites). Orphan/stale/
+# untriaged findings are normal ongoing-curation state and never block —
+# see wiki-lint --strict and tools/wiki/lint.py's BLOCKING_KEYS.
+#
+# One generic script for every wiki repo (wiki, wiki-work, wiki-finance,
+# and any future external vault repo): it looks up vaults.toml to find
+# which registered vault(s) live in *this* repo, so nothing here is
+# hardcoded per-repo. Install with:
+#   cp ~/dev/wiki/.githooks/pre-commit "$(git rev-parse --show-toplevel)/.git/hooks/pre-commit"
+#   chmod +x "$(git rev-parse --show-toplevel)/.git/hooks/pre-commit"
+set -euo pipefail
+
+WIKI_REPO="$HOME/dev/wiki"
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+
+cd "$WIKI_REPO"
+
+VAULTS=$(uv run python -c "
+from pathlib import Path
+from wiki import config
+repo_root = Path('$REPO_ROOT').resolve()
+names = [
+    v.name for v in config.load_vaults().values()
+    if v.path.resolve() == repo_root or repo_root in v.path.resolve().parents
+]
+print(','.join(names))
+")
+
+if [ -z "$VAULTS" ]; then
+    exit 0
+fi
+
+uv run wiki-lint --vault "$VAULTS" --strict

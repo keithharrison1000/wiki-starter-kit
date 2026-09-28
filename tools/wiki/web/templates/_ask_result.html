@@ -1,0 +1,15 @@
+{% if error %}
+  <p class="error">{{ error }}</p>
+{% elif result %}
+  <div class="answer">
+    <p>{{ result.answer }}</p>
+    {% if result.citations %}
+      <p class="muted">Sources:</p>
+      <ul class="citation-list">
+        {% for c in result.citations %}
+          <li><a href="/{{ c.vault }}/notes/{{ c.path }}">{{ c.title or c.path }}</a> <span class="muted">({{ c.vault }})</span></li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+{% endif %}

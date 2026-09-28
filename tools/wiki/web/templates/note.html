@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ concept.title or note_path }} — {{ vault.name }}{% endblock %}
+{% block content %}
+  <p><a href="/{{ vault.name }}/">← {{ vault.name }}</a></p>
+  <article class="note">
+    <header class="note-header">
+      <span class="type-badge">{{ concept.type }}</span>
+      <h1>{{ concept.title or note_path }}</h1>
+      {% if concept.description %}<p class="muted">{{ concept.description }}</p>{% endif %}
+      {% if concept.tags %}
+        <p class="tags">{% for tag in concept.tags %}<span class="tag">{{ tag }}</span>{% endfor %}</p>
+      {% endif %}
+    </header>
+    <div class="note-body">{{ body_html | safe }}</div>
+  </article>
+{% endblock %}

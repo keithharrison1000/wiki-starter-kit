@@ -1,0 +1,11 @@
+# Registry of wiki vaults (OKF bundles). Edit by hand or via wiki-new-vault.
+
+[[vault]]
+name = "general"
+path = "vaults/general"
+sensitive = false
+
+[[vault]]
+name = "hobby-example"
+path = "vaults/hobby-example"
+sensitive = false

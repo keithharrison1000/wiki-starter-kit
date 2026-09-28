@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+.python-version
+
+# Local vector indexes (rebuild with wiki-index)
+tools/wiki/data/
+
+.obsidian/workspace*
+.DS_Store
+
+# Personal/machine-specific, not project config
+.claude/settings.local.json

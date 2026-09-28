@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Ask — Wiki{% endblock %}
+{% block content %}
+  <h1>Ask a question</h1>
+  <form method="post" action="/ask" hx-post="/ask" hx-target="#ask-result" hx-swap="innerHTML">
+    <p>
+      <textarea name="q" rows="3" placeholder="Ask something about the wiki…" required>{{ q or "" }}</textarea>
+    </p>
+    <fieldset>
+      <legend>Search</legend>
+      <label>
+        <input type="radio" name="scope" value="all" {% if scope != "current" %}checked{% endif %}>
+        All vaults
+      </label>
+      <label>
+        <input type="radio" name="scope" value="current" {% if scope == "current" %}checked{% endif %}>
+        Just this vault:
+      </label>
+      <select name="vault">
+        {% for v in vaults %}
+          <option value="{{ v.name }}" {% if v.name == preselected_vault %}selected{% endif %}>{{ v.name }}</option>
+        {% endfor %}
+      </select>
+    </fieldset>
+    <button type="submit">Ask</button>
+  </form>
+  <div id="ask-result">
+    {% include "_ask_result.html" %}
+  </div>
+{% endblock %}

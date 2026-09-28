@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}{{ vault.name }} — Wiki{% endblock %}
+{% block content %}
+  <p><a href="/">← All vaults</a></p>
+  <h1>{{ vault.name }}</h1>
+  <p><a href="/ask?vault={{ vault.name }}">Ask a question about this vault →</a></p>
+
+  {% for type_name, notes in prominent %}
+    <section class="note-group">
+      <h2>{{ type_name }}</h2>
+      <ul class="note-list">
+        {% for rel, concept in notes %}
+          <li>
+            <a href="/{{ vault.name }}/notes/{{ rel }}">{{ concept.title or rel }}</a>
+            {% if concept.description %}<p class="muted">{{ concept.description }}</p>{% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endfor %}
+
+  {% for type_name, notes in collapsed %}
+    <details class="note-group collapsed">
+      <summary><h2>{{ type_name }} ({{ notes|length }})</h2></summary>
+      <ul class="note-list">
+        {% for rel, concept in notes %}
+          <li>
+            <a href="/{{ vault.name }}/notes/{{ rel }}">{{ concept.title or rel }}</a>
+            {% if concept.description %}<p class="muted">{{ concept.description }}</p>{% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </details>
+  {% endfor %}
+
+  {% if not prominent and not collapsed %}
+    <p class="muted">This vault doesn't have any notes yet.</p>
+  {% endif %}
+{% endblock %}
