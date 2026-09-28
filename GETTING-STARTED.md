@@ -21,30 +21,51 @@ something works the way it does, or want the full list of commands.
 
 ## What you'll need
 
-1. **A terminal.** On a Mac, that's the Terminal app (Spotlight search
-   → "Terminal"). Everything below is typed there.
+Every command in this guide is written for a **Unix-style terminal**
+(what Mac Terminal gives you natively). **On Windows, install [Git for
+Windows](https://git-scm.com/downloads/win) first and do everything
+below in the "Git Bash" app it installs** — not PowerShell or Command
+Prompt — and every command in this guide will then work exactly as
+written, with zero translation needed. (Claude Code does also run fine
+from plain PowerShell if you'd rather; the one thing that's genuinely
+different either way is how you install the tools below, covered
+per-item.)
+
+1. **A terminal.** Mac: Spotlight search → "Terminal". Windows: install
+   Git for Windows above, then open "Git Bash" from the Start menu.
 2. **[Claude Code](https://claude.com/claude-code)** — this is what
-   actually does the reading, organising, and answering. Install it
-   and make sure you can run `claude` from your terminal before going
-   further.
+   actually does the reading, organising, and answering.
+   - **Mac/Linux**: follow the installer at the link above.
+   - **Windows**: easiest is `winget install Anthropic.ClaudeCode`
+     from PowerShell (one-off — you only need PowerShell for this one
+     command, then switch back to Git Bash for everything else); or
+     `irm https://claude.ai/install.ps1 | iex` if `winget` isn't
+     available. Requires 64-bit Windows 10 or newer.
+   - Either way, make sure you can run `claude` from your terminal
+     before going further — you may need to close and reopen the
+     terminal window first.
 3. **[uv](https://docs.astral.sh/uv/getting-started/installation/)** —
    the tool that installs everything this wiki needs (Python and all
    its dependencies) in one step, without you having to manage Python
-   versions yourself. Install it, then check it worked:
-   ```bash
-   uv --version
-   ```
+   versions yourself.
+   - **Mac/Linux**: `curl -LsSf https://astral.sh/uv/install.sh | sh`
+   - **Windows**: `winget install astral-sh.uv` (from PowerShell,
+     same one-off exception as Claude Code above)
+   - Check it worked (from your normal terminal — Git Bash on Windows):
+     ```bash
+     uv --version
+     ```
 4. **[Obsidian](https://obsidian.md)** (optional but recommended) — a
-   free app for browsing and reading your notes with proper formatting
-   and a graph view. Not required for anything to *work*, just makes
-   the notes nicer to read.
+   free app, identical on Mac and Windows, for browsing and reading
+   your notes with proper formatting and a graph view. Not required
+   for anything to *work*, just makes the notes nicer to read.
 5. **[Ollama](https://ollama.com)** (optional) — only needed if you
    want fast local search across your notes (`wiki-query`). Skip this
    for now; you can add it later. If you do want it:
-   ```bash
-   brew install ollama
-   ollama pull nomic-embed-text
-   ```
+   - **Mac**: `brew install ollama`, then `ollama pull nomic-embed-text`
+   - **Windows**: download and run the installer from
+     [ollama.com/download](https://ollama.com/download), then in your
+     terminal: `ollama pull nomic-embed-text`
 
 ## Step 1: get the code
 
@@ -151,6 +172,21 @@ behaves in your wiki.
 - Everything lives in plain markdown files in a git repository, so
   nothing is ever locked into a proprietary format, and your full
   history of changes is recoverable.
+
+## Windows troubleshooting
+
+- If Claude Code doesn't seem to find Git Bash automatically (you'll
+  see it fall back to PowerShell for its own internal commands), tell
+  it where Git Bash is by creating/editing
+  `%USERPROFILE%\.claude\settings.json` and adding:
+  ```json
+  {"env": {"CLAUDE_CODE_GIT_BASH_PATH": "C:\\Program Files\\Git\\bin\\bash.exe"}}
+  ```
+  (adjust the path if you installed Git for Windows somewhere else).
+- If `claude`, `uv`, or `ollama` say "command not found" right after
+  installing, close the terminal window completely and open a new one
+  — Windows only picks up newly-installed programs in fresh terminal
+  windows, not ones already open.
 
 ## If something goes sensitive or private
 
